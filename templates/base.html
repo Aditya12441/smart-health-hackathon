@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Smart Health{% endblock %} · Smart Health</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">+</span><span>Smart<span class="brand-light">Health</span><small>CARE • INSIGHT • SUPPLY</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav>
+      <a class="nav-link {% if active=='dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">▦ <span>Overview</span></a>
+      <a class="nav-link {% if active=='patients' %}active{% endif %}" href="{{ url_for('patient_page') }}">♙ <span>Patients</span></a>
+      <a class="nav-link {% if active=='appointments' %}active{% endif %}" href="{{ url_for('appointment_page') }}">◷ <span>Appointments</span></a>
+      <a class="nav-link {% if active=='inventory' %}active{% endif %}" href="{{ url_for('inventory_page') }}">▤ <span>Medicine inventory</span></a>
+      <a class="nav-link {% if active=='assistant' %}active{% endif %}" href="{{ url_for('assistant') }}">✧ <span>Health assistant</span><span class="beta">DEMO</span></a>
+    </nav>
+    <div class="sidebar-bottom"><div class="secure-dot"></div><div><strong>Demo environment</strong><small>Use fictional data only</small></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">SMART HEALTH PLATFORM</span><h1>{% block heading %}Overview{% endblock %}</h1></div><div class="top-right"><span class="live-dot"></span><span>System demo</span><div class="avatar">SH</div></div></header>
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-wrap">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+    {% block content %}{% endblock %}
+    <footer>SMART HEALTH · HACKATHON PROTOTYPE <span>Not for clinical use</span></footer>
+  </main>
+</div>
+</body></html>
