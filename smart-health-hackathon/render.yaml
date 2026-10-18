@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: smart-health-hackathon
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
