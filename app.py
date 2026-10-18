@@ -148,10 +148,22 @@ def assistant():
             if any(term in q for term in emergency):
                 answer = "This may be an emergency. Contact local emergency services immediately (112 in India) or go to the nearest emergency department. Do not rely on this demo assistant."
             elif any(term in q for term in ("stock", "medicine", "supply", "inventory", "shortage")):
-                low = [i for i in inventory if i["stock"] < i["minimum"]]
-                summary = ", ".join(f'{i["name"]} ({i["stock"]} {i["unit"]}; minimum {i["minimum"]})' for i in low)
-                answer = "Inventory summary: " + (summary or "No items are below their minimum stock level.") + " Confirm quantities and expiry dates with authorized staff."
-            elif any(term in q for term in ("appointment", "doctor", "schedule")):
+             elif any(term in q for term in ("stock", "medicine", "supply", "supplies", "inventory", "shortage", "low")):
+    low = [
+        item for item in inventory
+        if int(item.get("stock", 0)) <= int(item.get("minimum", 0))
+    ]
+
+    summary = ", ".join(
+        f'{item["name"]} ({item["stock"]} {item["unit"]}; minimum {item["minimum"]})'
+        for item in low
+    )
+
+    answer = (
+        "Inventory summary: " + summary
+        if summary
+        else "No items are below their minimum stock level."
+    ) + " Confirm quantities with staff."
                 answer = f"There are {len(appointments)} demo appointments recorded. Confirm schedules with the clinic team."
             else:
                 answer = "This demo cannot diagnose or prescribe. For personal symptoms or treatment decisions, contact a qualified healthcare professional. For urgent or severe symptoms, seek emergency care."
