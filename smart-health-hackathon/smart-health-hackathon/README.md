@@ -1,52 +1,59 @@
 # Smart Health — AI-Driven Health Center & Supply Chain Management
 
-A responsive hackathon prototype that brings basic clinic operations and medical-supply visibility into one dashboard.
+A Flask-based hackathon prototype demonstrating a clinic dashboard, demo patient directory, appointment planner, medical supply inventory, low-stock monitoring, and a rule-based operational assistant.
+
+> **Prototype and safety notice:** The app uses in-memory sample data. Do not enter real patient or other sensitive health information. It is not a medical device and must not be used for diagnosis, treatment, or real clinical operations.
 
 ## Features
-- Overview dashboard for patients, appointments, inventory and low-stock alerts.
-- Add fictional patient records and appointments.
-- Add supply items and automatically flag stock below a configurable minimum.
-- Rule-based assistant for inventory and operational summaries, with emergency guidance and clear medical limitations.
-- Responsive interface and a `/health` endpoint for basic health checks.
-- Dockerfile included for deployment to Google Cloud Run.
+
+- Dashboard metrics for demo patients, appointments, inventory, and low-stock items.
+- Patient form validation with bounded inputs.
+- Appointment validation for registered demo patients, valid date/time, and non-past dates.
+- Inventory validation with non-negative, bounded stock quantities.
+- Rule-based assistant for inventory/appointment summaries and emergency escalation messaging.
+- `/health` JSON readiness endpoint.
+- Security response headers, bounded request size, environment-based secret configuration.
+- Automated tests for routes, validation, core workflows, and safety responses.
+- GitHub Actions workflow runs tests on pushes and pull requests.
+- Accessibility enhancements: skip link, visible keyboard focus, semantic main landmark, live status messages, and reduced-motion support.
 
 ## Run locally
-Requires Python 3.10 or later.
+
+Python 3.10+ recommended.
 
 ```bash
 python -m venv .venv
-# Windows PowerShell: .venv\Scripts\Activate.ps1
-# macOS/Linux: source .venv/bin/activate
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
-Open http://127.0.0.1:8080
 
-## Deploy to Google Cloud Run
-1. Create a public GitHub repository and upload these files.
-2. In Google Cloud Console, create/select a project and enable billing if required.
-3. Open Cloud Run and choose **Deploy a container** / deploy from source (the console labels can change).
-4. Connect the GitHub repository or use the source deployment flow; build from the included Dockerfile.
-5. Allow unauthenticated access only if your hackathon demo needs to be publicly viewable. Copy the resulting HTTPS URL and test it in a private/incognito window.
+Open `http://127.0.0.1:8080`.
 
-Alternative with Google Cloud CLI after installing and authenticating `gcloud`:
+## Run tests
 
 ```bash
-gcloud run deploy smart-health --source . --region asia-south1 --allow-unauthenticated
+python -m unittest discover -s tests -v
+# Optional coverage report (install requirements-dev.txt first):
+coverage run -m unittest discover -s tests -v
+coverage report -m
 ```
 
-## Important prototype limitations
-- All records are fictional demo data held in process memory; they reset when the app restarts and are not shared across instances.
-- This is not production-ready and must not store real patient data. Add authentication, authorization, a secure database, audit logs, encryption, validation and privacy/security review before any real use.
-- The assistant is rule-based, not a connected large language model. It is not a medical device and does not diagnose, prescribe or replace a qualified clinician.
-- Use the official emergency number applicable to the deployment location. This demo mentions 112 for India.
+## Deploy on Render
 
-## Suggested hackathon demo
-1. Show the dashboard and its low-stock alerts.
-2. Add a fictional patient and an appointment.
-3. Add a supply item with stock below minimum and show the alert.
-4. Ask the assistant which supplies are low.
-5. Explain how real deployments could add supplier lead times, expiry tracking, demand forecasting and authenticated access.
+Use the project directory containing `app.py` as the Root Directory.
 
-## Tech stack
-Python · Flask · HTML · CSS · Docker · Google Cloud Run
+- **Build command:** `pip install -r requirements.txt`
+- **Start command:** `gunicorn app:app`
+- Add an environment variable named `SECRET_KEY` with a long, random value.
+- Set `COOKIE_SECURE=1` when serving the app exclusively over HTTPS.
+
+## Limitations and next steps
+
+- Current records are stored in memory and reset when the process restarts; use a database for persistence.
+- This prototype has no authentication or role-based access. Do not use real patient data.
+- The assistant is rule-based and does not call an AI model or provide medical advice.
+- For production, add authentication/authorization, CSRF protection, database migrations, audit logging, backups, privacy review, and comprehensive security testing.
