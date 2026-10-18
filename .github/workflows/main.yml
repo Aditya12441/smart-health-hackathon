@@ -21,10 +21,17 @@ jobs:
         with:
           python-version: "3.11"
 
+      
       - name: Install dependencies
+        working-directory: 
+smart-health-hackathon/
+smart-health-hackathon
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install 
+--upgrade pip
+          pip install -r 
+requirements.txt
+
 
       - name: Run automated tests
         run: python -m unittest discover -s tests -v
